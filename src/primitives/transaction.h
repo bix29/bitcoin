@@ -15,16 +15,20 @@
 static const int SERIALIZE_TRANSACTION_NO_WITNESS = 0x40000000;
 
 /** An outpoint - a combination of a transaction hash and an index n into its vout */
+/**
+* COutPoint主要用在交易的输入CTxIn中，用来确定当前输出的来源，
+* 包括前一笔交易的 hash，以及对应前一笔交易中的第几个输出的序列号。
+*/
 class COutPoint
 {
 public:
-    uint256 hash;
-    uint32_t n;
+    uint256 hash;   // 交易哈希
+    uint32_t n;     // 序列号
 
     COutPoint(): n((uint32_t) -1) { }
     COutPoint(const uint256& hashIn, uint32_t nIn): hash(hashIn), n(nIn) { }
 
-    ADD_SERIALIZE_METHODS;
+    ADD_SERIALIZE_METHODS; // 序列化用的宏，定义在 src/serialize.h
 
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action) {
@@ -57,6 +61,9 @@ public:
 /** An input of a transaction.  It contains the location of the previous
  * transaction's output that it claims and a signature that matches the
  * output's public key.
+ */
+/** 交易的输入，包括当前输入对应前一笔交易的输出的位置，以及花费前一笔输出需要的签名脚本
+ *  CScriptWitness是用来支持隔离见证时使用的。
  */
 class CTxIn
 {
@@ -128,6 +135,7 @@ public:
 /** An output of a transaction.  It contains the public key that the next input
  * must be able to sign with to claim it.
  */
+/** 交易的输出，包含金额和锁定脚本 */
 class CTxOut
 {
 public:
@@ -260,6 +268,8 @@ inline void SerializeTransaction(const TxType& tx, Stream& s) {
 
 /** The basic transaction that is broadcasted on the network and contained in
  * blocks.  A transaction can contain multiple inputs and outputs.
+ */
+/** 在网络中被广播然后被打包进区块的最基本的交易的结构，一个交易可能包含多个交易输入和输出.
  */
 class CTransaction
 {
