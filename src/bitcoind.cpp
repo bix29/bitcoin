@@ -176,6 +176,7 @@ bool AppInit(int argc, char* argv[])
     return fRet;
 }
 
+// 入口函数
 int main(int argc, char* argv[])
 {
     SetupEnvironment();
